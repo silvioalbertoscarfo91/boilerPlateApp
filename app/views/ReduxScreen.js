@@ -1,7 +1,5 @@
 import React from 'react'
-import Footer from '../components/Footer';
-import AddTodo from '../containers/AddTodo';
-import VisibleTodoList from '../containers/VisibleTodoList';
+import Counter from '../components/Counter';
 
 class ReduxScreen extends React.Component {
   static navigationOptions = {
@@ -11,9 +9,7 @@ class ReduxScreen extends React.Component {
   render() {
     return (
       <>
-        <AddTodo/>
-        <VisibleTodoList/>
-        <Footer/>
+        <Counter/>
       </>)
   };
 }
