@@ -22,7 +22,10 @@
     "react-native": "0.61.5",
     "react-native-gesture-handler": "^1.5.3",
     "react-native-screens": "^2.0.0-alpha.22",
-    "react-navigation": "^4.0.10"
+    "react-navigation": "^4.0.10",
+    "react-redux": "^7.1.3",
+    "redux": "^4.0.5",
+    "prop-types": "latest"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",

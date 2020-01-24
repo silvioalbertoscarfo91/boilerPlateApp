@@ -10,7 +10,7 @@ class HomeScreen extends React.Component {
     return (
       <Button
         title="Go to Jane's profile"
-        onPress={() => navigate('Profile')}
+        onPress={() => navigate('Redux')}
       />
     );
   }

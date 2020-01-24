@@ -9,13 +9,21 @@
 import React from 'react';
 
 import {createAppContainer} from 'react-navigation';
-import {RootStack} from './views/RootStackNavigator';
+import {RootStack} from './app/views/RootStackNavigator';
+import {Provider} from 'react-redux'
+import {createStore} from 'redux'
+import rootReducer from './app/reducers/index'
 
 const AppContainer = createAppContainer(RootStack);
+const store = createStore(rootReducer);
 
 export default class App extends React.Component {
   render() {
-    return <AppContainer />;
+    return (
+      <Provider store={store}>
+        <AppContainer/>
+      </Provider>
+    );
   }
 }
 
