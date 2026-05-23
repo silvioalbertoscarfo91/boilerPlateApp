@@ -28,7 +28,7 @@ Tests use Jest with the `react-native` preset. There is no TypeScript — the pr
 
 ## Architecture
 
-This is a React Native 0.76.5 boilerplate using **react-navigation v7** (stack navigator) with **Redux** for state management. Hermes is the JS engine. New Architecture (`newArchEnabled=true`) is enabled in `android/gradle.properties`.
+This is a React Native 0.85.3 boilerplate using **react-navigation v7** (stack navigator) with **Redux** for state management. Hermes is the JS engine. New Architecture (`newArchEnabled=true`) is enabled in `android/gradle.properties`.
 
 ### Navigation
 
