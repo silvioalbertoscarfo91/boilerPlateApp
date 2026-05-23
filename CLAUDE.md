@@ -28,13 +28,15 @@ Tests use Jest with the `react-native` preset. There is no TypeScript — the pr
 
 ## Architecture
 
-This is a React Native 0.61.5 boilerplate using **react-navigation v4** (stack navigator) with **Redux** for state management.
+This is a React Native 0.76.5 boilerplate using **react-navigation v7** (stack navigator) with **Redux** for state management. Hermes is the JS engine. New Architecture (`newArchEnabled=true`) is enabled in `android/gradle.properties`.
 
 ### Navigation
 
-`App.js` wraps everything in a Redux `<Provider>` and a `createAppContainer`. The single `RootStack` (defined in `app/views/RootStackNavigator.js`) registers four screens: `Home → Redux → Profile → Details`. Navigation between screens uses `this.props.navigation.navigate('ScreenName')`.
+`App.js` wraps everything in `GestureHandlerRootView` → `SafeAreaProvider` → Redux `<Provider>` → `NavigationContainer`. The single `RootStack` (defined in `app/views/RootStackNavigator.js`) is now a function component using `Stack.Navigator` / `Stack.Screen` from `@react-navigation/stack`. Screen titles and shared header styles (`Styles.headerStyle`, `Fonts.headline.bold`) are defined in `screenOptions` on `Stack.Navigator`; per-screen titles are set via the `options` prop on each `Stack.Screen`.
 
-Stack-level header config (font, style, platform-specific `headerMode`) lives in `app/views/StackNavigatorConfig.js` and is imported where needed.
+Navigation between screens uses `this.props.navigation.navigate('ScreenName')` (class components) or the `useNavigation` hook (function components).
+
+`app/views/StackNavigatorConfig.js` is kept for reference but is no longer imported — its content was merged into `RootStackNavigator.js`.
 
 ### Redux
 
@@ -56,6 +58,28 @@ Components access Redux state with `connect(mapStateToProps, mapDispatchToProps)
 - `Styles.js` — shared StyleSheet fragments (shadow, modal overlay, header style, info-text containers) that compose from Colors and Fonts
 
 New styles should reference these primitives rather than hardcoding values.
+
+## Post-migration manual steps
+
+After running `yarn install`, a few steps require native tooling and cannot be scripted:
+
+**iOS**
+- In Xcode rename `AppDelegate.m` → `AppDelegate.mm` (File inspector → rename) so Objective-C++ is enabled for Hermes. The pbxproj is already tracking the file by name, so Xcode will update the reference automatically.
+- Run `cd ios && pod install` to regenerate the Podfile.lock with the new simplified Podfile.
+- Delete `ios/Podfile.lock` before `pod install` if it conflicts with old pod versions.
+
+**Android**
+- `android/app/src/debug/` no longer needs a Flipper integration file; it only needs its `AndroidManifest.xml` (already correct).
+- `android/app/BUCK` and `android/app/build_defs.bzl` are Buck build system artifacts that are no longer used; they can be deleted.
+
+**Redux deprecation warning**
+- `createStore` from `redux` 5 emits a deprecation notice. It still works but the recommended path is [Redux Toolkit](https://redux-toolkit.js.org/) (`configureStore` from `@reduxjs/toolkit`).
+
+**Tests**
+- `__tests__/App-test.js` renders `<App />` which now includes `GestureHandlerRootView` and `NavigationContainer`. Add this to `jest.setup.js` (and register it in `jest.setupFilesAfterFramework`) to avoid gesture-handler warnings in tests:
+  ```js
+  import 'react-native-gesture-handler/jestSetup';
+  ```
 
 ---
 
