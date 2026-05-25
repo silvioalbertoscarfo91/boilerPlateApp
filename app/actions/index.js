@@ -1,4 +1,4 @@
-import { changeCount } from './count'
+import { changeCount } from './count';
 
 export const actions = {
   changeCount,
